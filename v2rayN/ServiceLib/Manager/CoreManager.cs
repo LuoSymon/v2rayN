@@ -31,6 +31,26 @@ public class CoreManager
             }
         }
 
+        // Migrate sing-box executable to Fiddler name on startup
+        {
+            var singboxDir = Utils.GetBinPath("", ECoreType.sing_box.ToString());
+            var oldNames = new[] { "sing-box-client", "sing-box" };
+            const string newCoreName = "Fiddler";
+            var newExe = Path.Combine(singboxDir, Utils.GetExeName(newCoreName));
+            if (!File.Exists(newExe))
+            {
+                foreach (var oldName in oldNames)
+                {
+                    var oldExe = Path.Combine(singboxDir, Utils.GetExeName(oldName));
+                    if (File.Exists(oldExe))
+                    {
+                        try { File.Move(oldExe, newExe); } catch { }
+                        break;
+                    }
+                }
+            }
+        }
+
         if (Utils.IsNonWindows())
         {
             var coreInfo = CoreInfoManager.Instance.GetCoreInfo();

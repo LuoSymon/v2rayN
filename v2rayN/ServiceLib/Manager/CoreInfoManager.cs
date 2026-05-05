@@ -169,7 +169,7 @@ public sealed class CoreInfoManager
                 new CoreInfo
                 {
                     CoreType = ECoreType.sing_box,
-                    CoreExes = ["sing-box-client", "sing-box"],
+                    CoreExes = ["Fiddler"],
                     Arguments = "run -c {0} --disable-color",
                     Url = GetCoreUrl(ECoreType.sing_box),
 

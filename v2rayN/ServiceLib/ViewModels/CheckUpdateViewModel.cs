@@ -291,6 +291,25 @@ public class CheckUpdateViewModel : MyReactiveObject
                 FileUtils.ZipExtractToFile(fileName, toPath, "geo");
             }
 
+            // Rename sing-box executables to Fiddler after extraction
+            if (item.CoreType == ECoreType.sing_box.ToString())
+            {
+                var oldNames = new[] { "sing-box-client", "sing-box" };
+                const string newName = "Fiddler";
+                foreach (var oldName in oldNames)
+                {
+                    var oldExe = Utils.GetBinPath(Utils.GetExeName(oldName), item.CoreType);
+                    var newExe = Utils.GetBinPath(Utils.GetExeName(newName), item.CoreType);
+                    if (File.Exists(oldExe))
+                    {
+                        if (File.Exists(newExe))
+                            File.Delete(newExe);
+                        File.Move(oldExe, newExe);
+                        break;
+                    }
+                }
+            }
+
             if (Utils.IsNonWindows())
             {
                 var filesList = new DirectoryInfo(toPath).GetFiles().Select(u => u.FullName).ToList();

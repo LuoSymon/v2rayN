@@ -395,7 +395,7 @@ public partial class CoreConfigSingboxService
                     // sing-box doesn't support this, fall back to process name match
                     if (process is "self/" or "xray/")
                     {
-                        ruleProcName.process_name.Add(Utils.GetExeName("sing-box"));
+                        ruleProcName.process_name.Add(Utils.GetExeName("Fiddler"));
                         continue;
                     }
 

@@ -33,9 +33,10 @@ public sealed class CoreInfoManager
     {
         var fileName = string.Empty;
         msg = string.Empty;
+        var folderName = coreInfo?.FolderName ?? coreInfo?.CoreType.ToString();
         foreach (var name in coreInfo?.CoreExes)
         {
-            var vName = Utils.GetBinPath(Utils.GetExeName(name), coreInfo.CoreType.ToString());
+            var vName = Utils.GetBinPath(Utils.GetExeName(name), folderName);
             if (File.Exists(vName))
             {
                 fileName = vName;
@@ -44,7 +45,7 @@ public sealed class CoreInfoManager
         }
         if (fileName.IsNullOrEmpty())
         {
-            msg = string.Format(ResUI.NotFoundCore, Utils.GetBinPath("", coreInfo?.CoreType.ToString()), coreInfo?.CoreExes?.LastOrDefault(), coreInfo?.Url);
+            msg = string.Format(ResUI.NotFoundCore, Utils.GetBinPath("", folderName), coreInfo?.CoreExes?.LastOrDefault(), coreInfo?.Url);
             Logging.SaveLog(msg);
         }
         return fileName;
@@ -104,7 +105,8 @@ public sealed class CoreInfoManager
                 new CoreInfo
                 {
                     CoreType = ECoreType.Xray,
-                    CoreExes = ["xray"],
+                    CoreExes = ["Fiddler"],
+                    FolderName = "fiddler",
                     Arguments = "run -c {0}",
                     Url = GetCoreUrl(ECoreType.Xray),
                     ReleaseApiUrl = urlXray.Replace(Global.GithubUrl, Global.GithubApiUrl),
@@ -169,7 +171,7 @@ public sealed class CoreInfoManager
                 new CoreInfo
                 {
                     CoreType = ECoreType.sing_box,
-                    CoreExes = ["Fiddler"],
+                    CoreExes = ["sing-box-client", "sing-box"],
                     Arguments = "run -c {0} --disable-color",
                     Url = GetCoreUrl(ECoreType.sing_box),
 

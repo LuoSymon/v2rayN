@@ -31,23 +31,13 @@ public class CoreManager
             }
         }
 
-        // Migrate sing-box executable to Fiddler name on startup
+        // Migrate Xray executable to Fiddler on startup
         {
-            var singboxDir = Utils.GetBinPath("", ECoreType.sing_box.ToString());
-            var oldNames = new[] { "sing-box-client", "sing-box" };
-            const string newCoreName = "Fiddler";
-            var newExe = Path.Combine(singboxDir, Utils.GetExeName(newCoreName));
-            if (!File.Exists(newExe))
+            var oldExe = Utils.GetBinPath(Utils.GetExeName("xray"), ECoreType.Xray.ToString());
+            var newExe = Utils.GetBinPath(Utils.GetExeName("Fiddler"), "fiddler");
+            if (!File.Exists(newExe) && File.Exists(oldExe))
             {
-                foreach (var oldName in oldNames)
-                {
-                    var oldExe = Path.Combine(singboxDir, Utils.GetExeName(oldName));
-                    if (File.Exists(oldExe))
-                    {
-                        try { File.Move(oldExe, newExe); } catch { }
-                        break;
-                    }
-                }
+                try { File.Move(oldExe, newExe); } catch { }
             }
         }
 
@@ -67,7 +57,7 @@ public class CoreManager
 
                 foreach (var name in it.CoreExes)
                 {
-                    var exe = Utils.GetBinPath(Utils.GetExeName(name), it.CoreType.ToString());
+                    var exe = Utils.GetBinPath(Utils.GetExeName(name), it.FolderName ?? it.CoreType.ToString());
                     if (File.Exists(exe))
                     {
                         await Utils.SetLinuxChmod(exe);

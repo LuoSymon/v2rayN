@@ -18,5 +18,6 @@ public class CoreInfo
     public string? Match { get; set; }
     public string? VersionArg { get; set; }
     public bool AbsolutePath { get; set; }
+    public string? FolderName { get; set; }
     public IDictionary<string, string?> Environment { get; set; } = new Dictionary<string, string?>();
 }

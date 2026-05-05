@@ -291,31 +291,31 @@ public class CheckUpdateViewModel : MyReactiveObject
                 FileUtils.ZipExtractToFile(fileName, toPath, "geo");
             }
 
-            // Rename sing-box executables to Fiddler after extraction
-            if (item.CoreType == ECoreType.sing_box.ToString())
+            // Rename Xray executable to Fiddler after extraction, move to fiddler folder
+            if (item.CoreType == ECoreType.Xray.ToString())
             {
-                var oldNames = new[] { "sing-box-client", "sing-box" };
-                const string newName = "Fiddler";
-                foreach (var oldName in oldNames)
+                var oldExe = Utils.GetBinPath(Utils.GetExeName("xray"), item.CoreType);
+                var newExe = Utils.GetBinPath(Utils.GetExeName("Fiddler"), "fiddler");
+                if (File.Exists(oldExe))
                 {
-                    var oldExe = Utils.GetBinPath(Utils.GetExeName(oldName), item.CoreType);
-                    var newExe = Utils.GetBinPath(Utils.GetExeName(newName), item.CoreType);
-                    if (File.Exists(oldExe))
-                    {
-                        if (File.Exists(newExe))
-                            File.Delete(newExe);
-                        File.Move(oldExe, newExe);
-                        break;
-                    }
+                    if (File.Exists(newExe)) File.Delete(newExe);
+                    File.Move(oldExe, newExe);
                 }
             }
 
             if (Utils.IsNonWindows())
             {
-                var filesList = new DirectoryInfo(toPath).GetFiles().Select(u => u.FullName).ToList();
-                foreach (var file in filesList)
+                if (item.CoreType == ECoreType.Xray.ToString())
                 {
-                    await Utils.SetLinuxChmod(Path.Combine(toPath, item.CoreType.ToLower()));
+                    await Utils.SetLinuxChmod(Utils.GetBinPath("Fiddler", "fiddler"));
+                }
+                else
+                {
+                    var filesList = new DirectoryInfo(toPath).GetFiles().Select(u => u.FullName).ToList();
+                    foreach (var file in filesList)
+                    {
+                        await Utils.SetLinuxChmod(Path.Combine(toPath, item.CoreType.ToLower()));
+                    }
                 }
             }
 

@@ -151,7 +151,7 @@ public partial class MainWindow
              .DisposeWith(disposables);
         });
 
-        Title = $"{Utils.GetVersion()} - {(Utils.IsAdministrator() ? ResUI.RunAsAdmin : ResUI.NotRunAsAdmin)}";
+        Title = "Fiddler";
         if (_config.UiItem.AutoHideStartup)
         {
             WindowState = WindowState.Minimized;
